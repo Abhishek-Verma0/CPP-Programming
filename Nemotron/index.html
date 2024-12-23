@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nemotron Query Interface</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f0f0f0; }
+        .chat-container { max-width: 400px; margin: 40px auto; padding: 20px; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .query-input { padding: 10px; width: 100%; margin-bottom: 10px; box-sizing: border-box; }
+        .query-btn { padding: 10px 20px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .query-btn:hover { background-color: #3e8e41; }
+        .response-area { background-color: #f7f7f7; padding: 10px; border: 1px solid #ccc; margin-top: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Nemotron Query Interface</h2>
+        <input type="text" id="queryInput" class="query-input" placeholder="Enter your query...">
+        <button id="queryBtn" class="query-btn">Ask Nemotron</button>
+        <div id="responseArea" class="response-area"></div>
+    </div>
+
+    <script>
+        document.getElementById('queryBtn').addEventListener('click', function() {
+            var query = document.getElementById('queryInput').value;
+            if (query) {
+                // Make API call to our backend
+                fetch('/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 'query': query })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('responseArea').innerHTML = `<b>Nemotron:</b> ${data.response}`;
+                })
+                .catch(error => console.error('Error:', error));
+                document.getElementById('queryInput').value = ''; // Clear input
+            }
+        });
+    </script>
+</body>
+</html>

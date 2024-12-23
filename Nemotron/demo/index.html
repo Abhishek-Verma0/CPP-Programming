@@ -1,0 +1,77 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-box">
+             Chat will be displayed here -->
+        <!-- </div>
+        <input type="text" id="query-input" placeholder="Type your query here...">
+        <button id="send-btn">Send</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> --> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct API Call</title>
+</head>
+<body>
+    <div>
+        <input type="text" id="query-input" placeholder="Type your query...">
+        <button id="send-btn">Send</button>
+    </div>
+    <div id="response-box"></div>
+
+    <script>
+        document.getElementById('send-btn').addEventListener('click', function() {
+            const query = document.getElementById('query-input').value;
+            if (query) {
+                sendQuery(query);
+            }
+        });
+
+        async function sendQuery(query) {
+            const apiKey = "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";  // Replace with your API key
+            const apiUrl = `https://integrate.api.nvidia.com/v1`;  // Replace with your API URL
+            
+            const requestData = {
+                model: "nvidia/llama-3.1-nemotron-70b-instruct",
+                messages: [{"role":"user","content": query}],
+                temperature: 0.5,
+                top_p: 1,
+                max_tokens: 1024
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                const data = await response.json();
+                const result = data.choices[0].message.content; // Adjust based on API response structure
+                
+                document.getElementById('response-box').innerText = `AI: ${result}`;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('response-box').innerText = 'Error fetching response';
+            }
+        }
+    </script>
+</body>
+</html>
